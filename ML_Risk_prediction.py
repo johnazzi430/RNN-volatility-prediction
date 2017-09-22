@@ -152,11 +152,13 @@ variables = x_train.shape[1]
 
 x_train2 = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 x_test2 = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+y_train = np.asarray(y_train)
+y_test = np.asarray(y_test)
 
 model = Sequential()
 model.add(LSTM(4, batch_input_shape=(batch_size, variables, 1), stateful=True, return_sequences=True))
 model.add(LSTM(4, batch_input_shape=(batch_size, variables, 1), stateful=True))
-model.add(Dense(2))
+model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(x_train2, y_train, epochs=1, batch_size=batch_size, verbose=2, shuffle=False)
 
@@ -165,9 +167,5 @@ trainPredict = model.predict(x_train2, batch_size=batch_size)
 model.reset_states()
 testPredict = model.predict(x_test2, batch_size=batch_size)
 score = model.evaluate(x_test2, y_test, batch_size=batch_size)
-
-
-
-
-#prepareXandY(df_data)
+score = model.evaluate(x_train2, y_train, batch_size=batch_size)
 
